@@ -1,1 +1,1 @@
-# ssm-one store for some things
+# 本项目用来存储各种科学上网的配置以及规则等相关文件
