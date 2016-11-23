@@ -10,7 +10,6 @@ adapter:
      # port：填写自己的服务器端口
      # method：填写自己的服务器加密类型
      # password：填写自己的服务器密码
-     # 帐号来源：威锋
   - id: adapter1
     type: ss
     host: 服务器代理IP
