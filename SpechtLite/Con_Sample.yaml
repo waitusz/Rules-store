@@ -1,0 +1,79 @@
+# This is the local http proxy server port.
+# Note there is another SOCKS5 proxy server starts at port+1 automatically.
+port: 1079
+# Adapter is the remote proxy server you want to connect to
+adapter:
+     # id is used to distinguish adapter when defining rules.
+     # There is a 'direct' adapter that connect directly to target host without proxy.
+     # 以下为代理服务器信息，请替换成自己的
+     # host:填写自己的服务器代理
+     # port：填写自己的服务器端口
+     # method：填写自己的服务器加密类型
+     # password：填写自己的服务器密码
+     # 帐号来源：威锋
+  - id: adapter1
+    type: ss
+    host: 服务器代理IP
+    port: 服务器端口
+    method: 加密方法
+    password: 密码
+  # Speed adapter automatically connects to all specified adapters (with given delay)
+  # and uses the fastest one that becomes ready.
+  - id: proxy
+    type: SPEED
+    adapters:
+      - id: adapter1
+        delay: 150
+  # Disconnect after given delay without connecting to remote.
+  - id: reject
+    type: reject
+    # It's very important to set a delay since some apps may try to reconnect repeatedly.
+    delay: 300
+# Here defines how things should work.
+# Rule will be matched one by one.
+rule:
+  - type: list
+   # Reject requests based on whether the host domain matches the given regular expressions.
+    file: ~/.SpechtLite/rejectlist
+    adapter: reject
+  - type: iplist
+   # Reject requests based on the IP address of the host.
+    file: ~/.SpechtLite/rejectiprange
+    adapter: reject
+  - type: list
+   # Forward requests based on whether the host domain matches the given regular expressions.
+    file: ~/.SpechtLite/proxylist
+    adapter: proxy
+  - type: iplist
+   # Forward polluted host IP address
+    file: ~/.SpechtLite/pollutedip
+    adapter: proxy
+  - type: iplist
+   # Forward requests based on the IP address of the host.
+    file: ~/.SpechtLite/proxyiprange
+    adapter: proxy
+  - type: list
+   # Forward requests based on whether the host domain matches the given regular expressions.
+    file: ~/.SpechtLite/directlist
+    adapter: direct
+  - type: iplist
+   # Forward requests based on the IP address of the host.
+    file: ~/.SpechtLite/directiprange
+    adapter: direct
+  - type: country
+   # When the location is unknown. Usually this means this is resolved an Intranet IP.
+    country: CN
+    match: true
+    adapter: direct
+  - type: country
+   # When the location is unknown. Usually this means this is resolved an Intranet IP.
+    country: --
+    match: true
+    adapter: direct
+  - type: DNSFail
+   # When the DNS lookup of the host fails.
+    adapter: proxy
+  - type: all
+   # Match all other requests.
+    adapter: proxy
+# 配置结束
