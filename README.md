@@ -1,1 +1,3 @@
-# ssm-one store for some things
+# 本项目存放各种科学上网规则
+
+
